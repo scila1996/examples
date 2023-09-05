@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-debug
+spec:
+  # Run as below to execute on node
+  # kubectl apply -f node-debug.yaml
+  # kubectl exec -it node-debug -- bash
+  # chroot /host
+  # # and now, you can run every command on this node
+  containers:
+    - command:
+        - /bin/sh
+      image: ubuntu
+      imagePullPolicy: IfNotPresent
+      name: container-00
+      resources: {}
+      securityContext:
+        privileged: true
+        runAsUser: 0
+      stdin: true
+      stdinOnce: true
+      tty: true
+      volumeMounts:
+        - mountPath: /host
+          name: host
+  hostNetwork: true
+  hostPID: true
+  volumes:
+    - hostPath:
+        path: /
+        type: Directory
+      name: host
